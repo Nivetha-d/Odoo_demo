@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="menu_signup" model="website.menu">
+        <field name="name">Sign Up</field>
+        <field name="url">/signup</field>
+        <!--            <field name="page_id" ref=""/>-->
+        <field name="parent_id" search="[('parent_id','=',False),('website_id','=',1)]"/>
+        <field name="website_id" ref="website.default_website"/>
+        <field name="sequence" type="int">60</field>
+    </record>
+
+    <report
+            id="user_pdf_template"
+            model="website.menu"
+            string="PDF attachment"
+            report_type="qweb-pdf"
+            name="website_menu.customer_pdf_template"
+            file="website_menu.customer_pdf_template"
+            menu="False"
+    />
+</odoo>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record model="ir.ui.view" id="purchase_req_tree">
+        <field name="name">new_module list</field>
+        <field name="model">purchase.newchanges</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="emp_name"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="purchase_req_new_form" model="ir.ui.view">
+        <field name="name">purchase.order.form</field>
+        <field name="model">purchase.newchanges</field>
+        <field name="arch" type="xml">
+            <form string="Purchase Order" class="o_purchase_order">
+                <header>
+                    <button name="button_confirm_new" invisible="state != 'draft'" string="Confirm" type="object"
+                            context="{'send_rfq':True}" class="oe_highlight" data-hotkey="g"/>
+                    <button name="req_send_department" invisible="state != 'confirm'" string="Department Approval"
+                            type="object" groups="purchase_changes.admin_user"
+                            context="{'send_rfq':True}" class="oe_highlight" data-hotkey="g"/>
+                    <button name="approve_quotation" invisible="state != 'department'" string="Final Approval"
+                            type="object"
+                            context="{'send_rfq':True}" class="oe_highlight" data-hotkey="g"/>
+                    <button name="reset_to_draft" invisible="state != 'approve'" string="Set to Draft" type="object"
+                            context="{'send_rfq':True}" class="oe_highlight" data-hotkey="g"/>
+                    <button name="button_reject" invisible="state != 'approve'" string="Reject" type="object"
+                            context="{'send_rfq':True}" class="oe_highlight" data-hotkey="g"/>
+                    <button name="purchase_quotation" invisible="state != 'approve'" string="Create PO and Picking"
+                            type="object"
+                            context="{'send_rfq':True}" class="oe_highlight" data-hotkey="g"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,confirm,department,approve,po created,cancel" readonly="1"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button type="object" name="action_my_smart_button"
+                                class="oe_stat_button"
+                                icon="fa-pencil-square-o"
+                                invisible="state in ('draft', 'confirm', 'department')" string="Purchase"/>
+
+
+
+                        <!--                        <button type="object" name="action_view_invoice"-->
+                        <!--                                class="oe_stat_button"-->
+                        <!--                                icon="fa-pencil-square-o"-->
+                        <!--                        >-->
+                        <!--                            <div class="o_stat_info">-->
+                        <!--                                <span class="o_stat_text">-->
+                        <!--                                    RFQs-->
+                        <!--                                </span>-->
+                        <!--                                <field name="invoice_count" class="o_stat_value"/>-->
+                        <!--                            </div>-->
+
+                        <!--                                                        -->
+                        <!--                        </button>-->
+                    </div>
+                    <div class="oe_title">
+                        <span class="o_form_label" invisible="state not in ('draft', 'sent')">Request for Quotation
+                        </span>
+                        <span class="o_form_label" invisible="state in ('draft', 'sent')">Purchase Order</span>
+                        <h1 class="d-flex">
+                            <field name="priority" widget="priority" class="me-3"/>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group>
+                            <field name="emp_name"/>
+                            <field name="department_name"/>
+                        </group>
+                        <group>
+                            <field name="managers_id"/>
+                            <field name="req_date"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page name="product_lines" string="Product Lines">
+                            <field name="prod_line_ids">
+                                <tree editable="top">
+                                    <field name="requisition_action"/>
+                                    <field name="product_id"/>
+                                    <field name="name"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit"/>
+                                    <field name="uom_id"/>
+                                    <field name="vendor_name"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="Picking Details">
+                            <form>
+                                <group>
+                                    <group>
+                                        <field name="src_location"/>
+                                        <field name="destination_location"/>
+                                    </group>
+                                    <group>
+                                        <field name="deliver_to"/>
+                                        <field name="internal_picking"/>
+                                    </group>
+                                </group>
+                            </form>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+    <record model="ir.actions.act_window" id="purchase_changes.action_window">
+        <field name="name">purchase requisition</field>
+        <field name="res_model">purchase.newchanges</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <menuitem name="Purchase Requisition" id="purchase_changes.menu_1_list"/>
+
+    <menuitem name="Purchase Requisition" id="purchase_changes.sub_menu"
+              parent='purchase_changes.menu_1_list'
+              action="purchase_changes.action_window"/>
+
+
+</odoo>

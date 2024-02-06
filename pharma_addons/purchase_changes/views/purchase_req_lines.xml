@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="name_new" model="ir.ui.view">
+        <field name="name">New practise</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name ='partner_id']"
+                   position="after">
+<!--                <field name="pur_req"/>-->
+
+            </xpath>
+            <xpath expr="//page[@name ='products']/field[@name ='order_line']/tree/field[@name = 'product_id']"
+                   position="before">
+                <field name="requisition_action"/>
+
+            </xpath>
+
+
+        </field>
+    </record>
+    <record id="quality_new_inherited_view_form" model="ir.ui.view">
+        <field name="name">quality.new.inherited.view.form</field>
+        <field name="model">quality.point</field>
+        <field name="inherit_id" ref="quality.quality_point_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name ='instructions']" position="after">
+                <page string="Control Sample" name="control_sample">
+                    <group>
+                        <field name="src_location"/>
+                        <field name="destination_location"/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <record id="name_location_field" model="ir.ui.view">
+        <field name="name">New location field</field>
+        <field name="model">stock.location</field>
+        <field name="inherit_id" ref="stock.view_location_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name ='replenish_location']"
+                   position="after">
+                <field name="is_restricted"/>
+                <field name="is_unrestricted"/>
+                <field name="is_retest"/>
+                <field name="is_blocked"/>
+
+            </xpath>
+        </field>
+    </record>
+
+    <data>
+    <record id="view_stock_picking_line_form_inherit" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='operations']//tree//field[@name='lot_ids']" position="after">
+                <!--                     <button type="object" class="btn-info" name="action_open_quality_check_wizard" icon="fa-check"  title="Quality Check"/>-->
+                <button string="Quality Checks" name="check_quality" type="object" class="oe_highlight"
+                        data-hotkey="shift+z"/>
+
+            </xpath>
+        </field>
+    </record>
+
+
+</data>
+</odoo>

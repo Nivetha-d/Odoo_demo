@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<odoo>
+<!--       <data>-->
+<!--        &lt;!&ndash; Form view for Relational model &ndash;&gt;-->
+<!--        <record id="view_partner_details_form" model="ir.ui.view">-->
+<!--            <field name="name">partner.details.form</field>-->
+<!--            <field name="model">partner.details</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <form>-->
+
+<!--                    <sheet>-->
+<!--                        <group>-->
+
+<!--                            <field name="name"/>-->
+<!--                            <field name="product"/>-->
+<!--                            <field name="qty"/>-->
+
+<!--                        </group>-->
+<!--                    </sheet>-->
+<!--                </form>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="view_partner_details_tree" model="ir.ui.view">-->
+<!--            <field name="name">partner.details.tree</field>-->
+<!--            <field name="model">partner.details</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <tree>-->
+<!--                    <field name="name"/>-->
+
+<!--                </tree>-->
+<!--            </field>-->
+<!--        </record>-->
+
+
+<!--        <record id="action_partner_details_form" model="ir.actions.act_window">-->
+<!--            <field name="name">Partner</field>-->
+<!--            <field name="res_model">partner.details</field>-->
+<!--            <field name="view_mode">tree,form</field>-->
+<!--            <field name="context">{}</field>-->
+<!--            <field name="help" type="html">-->
+<!--                <p class="o_view_nocontent_smiling_face">-->
+<!--                    Create a first rel.....-->
+<!--                </p>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--  </data>-->
+<!--        <menuitem id="menu_partner_details"-->
+<!--                  name="Partner Details"-->
+<!--                  parent="menu_button_root"-->
+<!--                  action="action_partner_details_form"-->
+<!--        />-->
+
+
+
+
+</odoo>

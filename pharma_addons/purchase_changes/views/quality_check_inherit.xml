@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="name_new" model="ir.ui.view">
+        <field name="name">Quality Check</field>
+        <field name="model">quality.check</field>
+        <field name="inherit_id" ref="quality_control.quality_check_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name ='measure_on']"
+                   position="after">
+             <field name="location_id"/>
+            </xpath>
+
+        </field>
+    </record>
+</odoo>

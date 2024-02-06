@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo><data>
+    <record  id="ir_cron_send_expiry_mail" model="ir.cron">
+        <field name="name">Send Expiry Mail</field>
+        <field name="model_id" ref="product_ext.model_stock_lot"/>
+        <field name="state">code</field>
+        <field name="code">model.test_cron()</field>
+        <field name="user_id" ref="base.user_root"/>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+    </record>
+</data></odoo>

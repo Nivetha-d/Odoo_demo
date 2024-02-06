@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+<!--    <data>-->
+<!--      <record id="view_product_template_form_inherit" model="ir.ui.view">-->
+<!--            <field name="name">product.template.form.inherit</field>-->
+<!--            <field name="model">product.template</field>-->
+<!--            <field name="inherit_id" ref="product.product_template_only_form_view"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--&lt;!&ndash;            <xpath expr="//field[@name='barcode']" position="after">&ndash;&gt;-->
+<!--&lt;!&ndash;                <field name="expire_period"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            </xpath>&ndash;&gt;-->
+<!--&lt;!&ndash;                <xpath expr="//field[@name='expire_period']" position="after">&ndash;&gt;-->
+<!--&lt;!&ndash;                <field name="expire_in" />&ndash;&gt;-->
+<!--&lt;!&ndash;            </xpath>&ndash;&gt;-->
+<!--        </field>-->
+<!--     </record>-->
+
+<!--&lt;!&ndash;        <record id="view_product_template_form_inherit" model="ir.ui.view">&ndash;&gt;-->
+<!--&lt;!&ndash;            <field name="name">product.product.form.inherit</field>&ndash;&gt;-->
+<!--&lt;!&ndash;            <field name="model">product.product</field>&ndash;&gt;-->
+<!--&lt;!&ndash;            <field name="inherit_id" ref="	product.product_normal_form_view"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            <field name="arch" type="xml">&ndash;&gt;-->
+<!--&lt;!&ndash;            <xpath expr="//field[@name='barcode']" position="after">&ndash;&gt;-->
+<!--&lt;!&ndash;                <field name="expire"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            </xpath>&ndash;&gt;-->
+<!--&lt;!&ndash;        </field>&ndash;&gt;-->
+<!--&lt;!&ndash;     </record>&ndash;&gt;-->
+<!--    </data>-->
+
+<!--     <menuitem id="inherit_menu_patient"-->
+<!--               name="Inherit"-->
+<!--               parent="inherit_menu_master"-->
+
+<!--               sequence="0"/>-->
+
+</odoo>

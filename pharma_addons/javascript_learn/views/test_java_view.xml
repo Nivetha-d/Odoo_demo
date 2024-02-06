@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+
+    <template id="web_assets_backend_ext" inherit_id="web.assets_backend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript"
+                    src="/javascript_learn/static/src/js/javascript.js"/>
+        </xpath>
+
+    </template>
+
+
+</odoo>
