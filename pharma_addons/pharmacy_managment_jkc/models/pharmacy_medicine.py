@@ -1,4 +1,4 @@
-from odoo import models, fields,api
+from odoo import models, fields
 
 
 class ProductTemplate(models.Model):
@@ -9,20 +9,6 @@ class ProductTemplate(models.Model):
     category_id = fields.Many2one('product.category', string='Medicine Category')
     medicine_company_id = fields.Many2one('medicine.company', string='Medicine Company')
     expiry_date = fields.Date(string='Expiry Date')
-    expiry_period = fields.Integer(string="Expiry period",compute="compute_expire_period")
-    expiry_type = fields.Char(string="Exp_Type",default="months")
-
-    @api.onchange(category_id)
-    def compute_expire_period(self):
-        for record in self:
-            print(record.category_id.name)
-            if record.category_id and record.category_id.name == 'Excipent':
-                 expiry_period = 12
-            elif record.category_id.name == 'Active':
-                expiry_period = 6
-            else:
-                expiry_period = 0
-            record.expiry_period = expiry_period
 
 
 class ProductProduct(models.Model):

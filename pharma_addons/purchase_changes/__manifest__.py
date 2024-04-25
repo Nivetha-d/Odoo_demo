@@ -4,28 +4,28 @@
 
     'version': '1.0',
     'summary': 'Purchase Requisition ',
-    'sequence': 10,
+    'sequence': 120,
     'description': """
 
     """,
 
-    'depends': ['base', 'purchase','stock','quality_control','sale','account'],
+    'depends': ['base', 'purchase', 'stock', 'quality_control', 'sale','product','quality'],
 
     'data': [
+
         'security/ir.model.access.csv',
-        'data/sequence_data.xml',
-        'report/invoice_inherit.xml',
+        'views/new_button.xml',
+
         'views/purchase_req_lines.xml',
         'views/puchase_req.xml',
         'views/GroupsAcess.xml',
-        'views/invoice_report_inherit.xml',
-        'views/quality_check_inherit.xml'
+        'data/ir_cron.xml'
+
     ],
 
     'installable': True,
     'application': True,
 
     'license': 'LGPL-3',
-
 
 }

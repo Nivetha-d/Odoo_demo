@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <t t-name="accounting_payments.owlTodoListView.Buttons" t-extend="web.ListView.Buttons">
+  <t t-jquery="button.o_list_button_add" t-operation="after">
+
+<button type="button" class="btn btn-primary" t-on-click="OpenSalesView">Upload Payments</button>
+
+
+  </t>
+
+
+    </t>
+</templates>

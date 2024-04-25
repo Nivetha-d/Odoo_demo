@@ -17,7 +17,15 @@
        'views/test_java_view.xml'
     ],
 
-    'demo': [
+    'assets': {
+
+        'web.assets_backend': [
+            'javascript_learn/static/src/js/javascript.js',
+          ]
+    },
+
+
+        'demo': [
     ],
     'application': False,
     'auto_install': False,

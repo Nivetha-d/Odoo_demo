@@ -11,11 +11,6 @@
                 <field name="category_id"/>
                 <field name="medicine_company_id"/>
                 <field name="expiry_date"/>
-                 <label name="Expiry Period" for="expiry_period" />
-                 <div>
-                            <field name="expiry_period" class="oe_inline" />
-                            <field name="expiry_type" class="oe_inline" />
-                        </div>
             </xpath>
             <xpath expr="//page[@name='variants']" position="attributes">
                 <attribute name="invisible">True</attribute>

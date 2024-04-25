@@ -267,6 +267,7 @@ class MrpProduction(models.Model):
     @api.depends('procurement_group_id.mrp_production_ids')
     def _compute_mrp_production_backorder(self):
         for production in self:
+            print(production.procurement_group_id)
             production.mrp_production_backorder_count = len(production.procurement_group_id.mrp_production_ids)
 
     @api.depends('company_id', 'bom_id')
@@ -898,6 +899,7 @@ class MrpProduction(models.Model):
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
+
             # Remove from `move_finished_ids` the by-product moves and then move `move_byproduct_ids`
             # into `move_finished_ids` to avoid duplicate and inconsistency.
             if vals.get('move_finished_ids', False) and vals.get('move_byproduct_ids', False):
@@ -913,6 +915,7 @@ class MrpProduction(models.Model):
             if not vals.get('procurement_group_id'):
                 procurement_group_vals = self._prepare_procurement_group_vals(vals)
                 vals['procurement_group_id'] = self.env["procurement.group"].create(procurement_group_vals).id
+
         res = super().create(vals_list)
         # Make sure that the date passed in vals_list are taken into account and not modified by a compute
         for rec, vals in zip(res, vals_list):
@@ -930,6 +933,7 @@ class MrpProduction(models.Model):
                 and rec.move_finished_ids[0].date != vals['date_finished']):
                 rec.move_finished_ids.write({'date': vals['date_finished']})
         return res
+
 
     def unlink(self):
         self.action_cancel()
@@ -1071,6 +1075,7 @@ class MrpProduction(models.Model):
             byproduct_values.append(Command.create(bom_byproduct_vals))
         # Operations values.
         operations_values = [Command.create(wo._get_operation_values()) for wo in self.workorder_ids]
+        print(bom_lines_values,byproduct_values)
         return (bom_lines_values, byproduct_values, operations_values)
 
     @api.model
@@ -1779,6 +1784,7 @@ class MrpProduction(models.Model):
                 ))
 
         backorders = self.env['mrp.production'].with_context(skip_confirm=True).create(backorder_vals_list)
+
 
         index = 0
         production_to_backorders = {}

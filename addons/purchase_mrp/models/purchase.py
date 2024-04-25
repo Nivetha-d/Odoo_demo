@@ -18,10 +18,13 @@ class PurchaseOrder(models.Model):
     @api.depends('order_line.move_dest_ids.group_id.mrp_production_ids')
     def _compute_mrp_production_count(self):
         for purchase in self:
+            print(purchase)
             purchase.mrp_production_count = len(purchase._get_mrp_productions())
 
     def _get_mrp_productions(self, **kwargs):
+        print(self.order_line.move_dest_ids.group_id.mrp_production_ids)
         return self.order_line.move_dest_ids.group_id.mrp_production_ids | self.order_line.move_ids.move_dest_ids.group_id.mrp_production_ids
+
 
     def action_view_mrp_productions(self):
         self.ensure_one()

@@ -17,9 +17,10 @@ _logger = logging.getLogger(__name__)
 
 class Webhook(http.Controller):
 
-    @http.route('/whatsapp/webhook/', methods=['POST'], type="json", auth="public")
+    @http.route('/whatsapp/webhook/', methods=['POST'], type="http", auth="public")
     def webhookpost(self):
         data = json.loads(request.httprequest.data)
+
         for entry in data['entry']:
             account_id = entry['id']
             account = request.env['whatsapp.account'].sudo().search(

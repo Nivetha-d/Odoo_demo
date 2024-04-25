@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!--l10n_din5008-->
+    <template id="inherit_external_layout_din5008" inherit_id="l10n_din5008.external_layout_din5008">
+
+        <xpath expr="//div/div[1]" position="replace">
+              <div t-attf-class="header din_page o_company_#{company.id}_layout #{'din_page_pdf' if report_type == 'pdf' else ''}">
+
+
+                    <table class="company_header table-borderless" t-att-style="'height: %dmm;' % (din_header_spacing or 27)">
+                        <tr>
+                            <td>
+                                <div class="h3 mt0" t-field="company.report_header"/>
+
+
+                                <div class="not-first-page">
+                                    <p style="align:left;">Page:<span class="page"></span></p>
+                                     <t t-set="first_detail" t-value="docs.l10n_din5008_template_data[0]"/>
+                                <p>
+                                    <t t-esc="first_detail[0]"/>:
+                                    <span t-esc="first_detail[1]"/>
+                                </p>
+                                </div>
+
+                            </td>
+                            <td><img t-if="company.logo" t-att-src="image_data_uri(company.logo)" t-att-style="'max-height: %dmm;' % (din_header_spacing or 27)"/></td>
+                        </tr>
+                    </table>
+
+                </div>
+
+        </xpath>
+
+
+
+
+
+          <xpath expr="//div/div[2]/table/tr" position="replace">
+<!--                  <t t-if="docs._name in ('sale.order','stock.picking','account.move')">-->
+
+                <p style="font-size: 10px; white-space: nowrap;">
+                    <span style="text-decoration: underline;">STOTZ Feinmesstechnik GmbH-Postfach 10 04 13- D-70829
+                        Gerlingen
+                    </span>
+                </p>
+
+          </xpath>
+
+
+
+        <xpath expr="//div/div[3]/div[@class='company_details']/table" position="replace">
+
+
+            <!--              <hr style="border-top: 1px solid black; margin-top: 2px;"/>-->
+            <table class="table table-borderless" style="width: 100%; border-collapse: collapse;padding-left:0px;">
+                <tr>
+                    <td style="width: 42px; vertical-align: top;">
+                        <ul style="list-style-type: none;white-space: nowrap;">
+                            <li style="margin-bottom: 5px;">STOTZ Feinmesstechnik GmbH</li>
+                            <li style="margin-bottom: 5px;">Hermann-Dreher-Straße 6</li>
+                            <li style="margin-bottom: 5px;">70839 Gerlingen</li>
+                            <li style="margin-bottom: 5px;">Geschäftsführer:</li>
+                            <li style="margin-bottom: 5px;">Fredrik Ljungman</li>
+                        </ul>
+                    </td>
+                    <td style="width: 42px; vertical-align: top;">
+                        <ul style="list-style-type: none;white-space: nowrap;">
+                            <li style="margin-bottom: 5px;">Amtgericht Stuttgart</li>
+                            <li style="margin-bottom: 5px;">HRB-Nr. 20 12 40</li>
+                            <li style="margin-bottom: 5px;">USt-ID-Nr. DE257721375</li>
+                            <li style="margin-bottom: 5px;">Steuer-Nr. 70070/08513</li>
+                            <li style="margin-bottom: 5px;">EORI-Nr. DE4019466</li>
+                        </ul>
+                    </td>
+                    <td style="width: 42px; vertical-align: top;">
+                        <ul style="list-style-type: none;white-space: nowrap;">
+                            <li style="margin-bottom: 5px;">Unsere Kontaktdaten:</li>
+                            <li style="margin-bottom: 5px;">Telefon: +49 (0) 7156-94904-0</li>
+                            <li style="margin-bottom: 5px;">E-Mail: info@stotz.com</li>
+                            <li style="margin-bottom: 5px;">Internet: www.stotz.com</li>
+                        </ul>
+                    </td>
+                    <td style="width: 47px; vertical-align: top;">
+                        <ul style="list-style-type: none;white-space: nowrap;">
+                            <li style="margin-bottom: 5px;">VR Bank Schwäbischer Wald eG</li>
+                            <li style="margin-bottom: 5px;">(BLZ 61391410) Konto Nr. 0210210117</li>
+                            <li style="margin-bottom: 5px;">IBAN: DE62 6139 1410 0210 2101 17</li>
+                            <li style="margin-bottom: 5px;">SWIFT/BIC: GENODES1WEL</li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+        </xpath>
+
+
+
+        <xpath expr="//div/div[2]/h2" position="replace">
+
+        </xpath>
+
+
+
+
+
+    </template>
+
+
+
+
+</odoo>

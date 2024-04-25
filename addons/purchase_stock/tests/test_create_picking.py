@@ -528,6 +528,7 @@ class TestCreatePicking(common.TestProductCommon):
         initial demand should also impact the initial move and the
         purchase order if it wasn't yet confirmed.
         """
+
         def create_run_procurement(product, product_qty, values=None):
             if not values:
                 values = {

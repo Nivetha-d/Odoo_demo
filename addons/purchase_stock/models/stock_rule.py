@@ -98,6 +98,7 @@ class StockRule(models.Model):
             po = self.env['purchase.order'].sudo().search([dom for dom in domain], limit=1)
             company_id = procurements[0].company_id
             if not po:
+                print("new po created")
                 positive_values = [p.values for p in procurements if float_compare(p.product_qty, 0.0, precision_rounding=p.product_uom.rounding) >= 0]
                 if positive_values:
                     # We need a rule to generate the PO. However the rule generated
@@ -298,8 +299,10 @@ class StockRule(models.Model):
             'payment_term_id': partner.with_company(company_id).property_supplier_payment_term_id.id,
             'date_order': purchase_date,
             'fiscal_position_id': fpos.id,
-            'group_id': group
+            'group_id': group,
+            'partner_ref':"nivetha"
         }
+
 
     def _make_po_get_domain(self, company_id, values, partner):
         gpo = self.group_propagation_option

@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+ <template id="report_picking_delivery">
+      <t t-call="web.basic_layout">
+         <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <div class="page1">
+                   <div class="header">
+
+                    <table class="table table-borderless">
+                           <tr>
+                               <td style="width:80%;font-size:13px;">
+
+                                <div class="first-page">
+                                    <span t-field="docs.name" t-options="{'widget': 'barcode','img_style':'width:100%;height:40px;'}"/>
+                                     </div>
+
+                                   <div class="not-first-page">
+                                    <p style="align:left;">Page:<span class="page"></span></p>
+                                     <t t-set="first_detail" t-value="docs.l10n_din5008_template_data[0]"/>
+                                <p>
+                                    <t t-esc="first_detail[0]"/>:
+                                    <span t-esc="first_detail[1]"/>
+                                </p>
+                                </div>
+
+
+
+                               </td>
+                                <td style="width:20%;">
+                       <img src='/web/binary/company_logo'  style="max-height: 65px; margin-top:20px;" alt="Logo"/>
+
+                               </td>
+                           </tr>
+                       </table>
+                   </div>
+
+                      <p style="font-size: 8px; white-space: nowrap;">
+                    <span style="text-decoration: underline;">STOTZ Feinmesstechnik GmbH-Postfach 10 04 13- D-70829
+                        Gerlingen
+                    </span>
+                </p>
+
+
+         <br/><br/>
+              <table class="din_company_info table-borderless"
+                       style="width:100%;border-collapse: collapse;padding-left:0px;">
+                    <tr>
+                        <td style="width:50%;">
+                            <div>
+                                <p style="font-size:15px;">
+                                    <span t-esc="docs.get_partner_name().get('name', '')"/>
+                               </p>
+                                <p style="font-size:15px;">
+                                    <span t-esc="docs.get_partner_name().get('street', '')"/>
+                                </p>
+                                <p style="font-size:15px;">
+                                    <span t-esc="docs.get_partner_name().get('street2', '')"/>
+                                </p>
+                                <p style="font-size:15px;">
+                                    <span t-esc="docs.get_partner_name().get('city', '')"/>&#160;&#160;&#160;&#160;
+                                    <span t-esc="docs.get_partner_name().get('zip', '')"/>
+                                </p>
+
+
+                            </div>
+                        </td>
+
+                        <td style="width:50%;">
+                             <t t-foreach="docs.l10n_din5008_template_data" t-as="detail">
+                <p style="margin-left:60px;font-size:15px;">
+                    <t t-if="detail_index == 0">
+                        <b style="font-size:20px;"><t t-esc="detail[0]"/>:
+                        </b>
+                    </t>
+                    <t t-else="">
+                        <t t-esc="detail[0]"/>:
+                    </t>
+                    <t t-if="detail_index == 0">
+                        <b style="font-size:20px;">
+                            <span t-esc="detail[1]"/>
+                        </b>
+
+                    </t>
+                    <t t-else="">
+                        <t t-esc="detail[1]"/>
+                    </t>
+                </p>
+            </t>
+                        </td>
+
+                    </tr>
+                </table>
+                <table class="table table-borderless">
+                    <t t-set="is_picking_operation" t-value="docs._name == 'stock.picking'"/>
+                    <t t-if="docs.state not in ('draft', 'sent')">
+                        <tr>
+                            <td>
+                                <p style="font-size:15px;">
+                                    <t t-if="not is_picking_operation">Ship to:</t>
+                                    <t t-if="is_picking_operation">Bill to:</t>
+                                    <br/>
+                                    <span t-esc="docs.get_partner_name().get('name', '')"/>
+                                    <br/>
+                                    <span t-esc="docs.get_partner_name().get('city', '')"/> &#160;&#160;&#160;&#160;
+                                    <span t-esc="docs.get_partner_name().get('zip', '')"/>
+                                </p>
+                            </td>
+                        </tr>
+                    </t>
+                </table>
+                   </div>
+
+
+
+
+                <hr style="border-top: 2px solid black; width: 100%; margin-top: 0; margin-bottom: 0;"/>
+
+
+    <table class="table-borderless" style="width:100%;margin-left:60px;">
+        <tr>
+            <td>
+              <p> Your order dated: <span t-esc="docs.get_order_details_table().get('Your_order_dated', '')"/></p>
+         <p>Your order of:<span t-esc="docs.get_order_details_table().get('Your_order_of', '')"/></p>
+
+            </td>
+               <td><p>Specialist: <span t-esc="docs.get_order_details_table().get('Specialist', '')"/></p></td>
+        </tr>
+
+    </table>
+
+        <br/>
+
+                <table style="width:100%; border-collapse: collapse; border-spacing: 0;">
+                    <thead>
+                        <tr>
+                            <th style="width:20%; padding: 10px; border: 1px solid black;">Pos.</th>
+                            <th style="width:20%; padding: 10px; border: 1px solid black;">Article-Number/-Description
+                            </th>
+                            <th style="width:20%; padding: 10px; border: 1px solid black;">Qty</th>
+                            <th style="width:20%; padding: 10px; border: 1px solid black;">Open</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="index" t-value="1"/>
+                        <!-- Iterate over order lines -->
+                        <t t-foreach="docs.move_ids" t-as="o">
+                            <tr style="height: 50px;">
+                                <td style="padding: 10px; border: 1px solid black; text-align: center;">
+                                    <t t-esc="index"/>
+                                </td>
+                                <td style="padding: 10px; border: 1px solid black; text-align: center;">
+                                    <p><t t-esc="o.product_id.name"/></p>
+                             <p><t t-esc="o.description_picking"/></p>
+
+                                </td>
+                                <td style="padding: 10px; border: 1px solid black; text-align: center;">
+                                    <t t-esc="o.quantity"/>
+                                </td>
+                                <td style="padding: 10px; border: 1px solid black; text-align: center;">
+                                    <t t-esc=""/>
+                                </td>
+
+                                <!-- Increment index -->
+                                <t t-set="index" t-value="index + 1"/>
+                            </tr>
+                        </t>
+                    </tbody>
+
+                </table>
+    <br/><br/><br/><br/>
+    <p>This delivery is subject to our terms of sale.</p>
+    <p>The current version is available at www.stotz.com.</p>
+    <p style="font-size:15px;">Shipping Type</p>
+        <br/><br/><br/><br/>    <br/><br/><br/><br/>    <br/><br/><br/><br/>
+    <p style="font-size:12px;">We have assigned our receivables to adesion Factoring GmbH (for the handling of personal data we refer to our homepage:</p>
+<p style="font-size:12px;">https://www.adesion.de/htm/datenschutz.php) within the framework of an ongoing factoring contract. Payments by check, bank transfer or in any other form can only be made with debt-freeing effect to adesion Factoring GmbH, Konstanzer Hof-Gasse 9-11, 73614 Schorndorf, Germany to the account no. 0210210117 at VR Bank Schwäbischer Wald eG, BLZ 290 500 00, IBAN: DE62 6139 1410 0210 2101 17,
+BIC: GENODES1WEL</p>
+
+
+        </t>
+             <br/>
+                 <div class="footer">
+                          <hr style="border-top: 1px solid black; margin-top: 2px;"/>
+
+                     <table class="table table-borderless" style="width: 100%; border-collapse: collapse;padding-left:0px;font-size:12px;">
+                <tr>
+                    <td style="width: 42px; vertical-align: top;">
+                        <ul style="list-style-type: none;white-space: nowrap;">
+                            <li style="margin-bottom: 5px;">STOTZ Feinmesstechnik GmbH</li>
+                            <li style="margin-bottom: 5px;">Hermann-Dreher-Straße 6</li>
+                            <li style="margin-bottom: 5px;">70839 Gerlingen</li>
+                            <li style="margin-bottom: 5px;">Geschäftsführer:</li>
+                            <li style="margin-bottom: 5px;">Fredrik Ljungman</li>
+                        </ul>
+                    </td>
+                    <td style="width: 42px; vertical-align: top;">
+                        <ul style="list-style-type: none;white-space: nowrap;">
+                            <li style="margin-bottom: 5px;">Amtgericht Stuttgart</li>
+                            <li style="margin-bottom: 5px;">HRB-Nr. 20 12 40</li>
+                            <li style="margin-bottom: 5px;">USt-ID-Nr. DE257721375</li>
+                            <li style="margin-bottom: 5px;">Steuer-Nr. 70070/08513</li>
+                            <li style="margin-bottom: 5px;">EORI-Nr. DE4019466</li>
+                        </ul>
+                    </td>
+                    <td style="width: 42px; vertical-align: top;">
+                        <ul style="list-style-type: none;white-space: nowrap;">
+                            <li style="margin-bottom: 5px;">Unsere Kontaktdaten:</li>
+                            <li style="margin-bottom: 5px;">Telefon: +49 (0) 7156-94904-0</li>
+                            <li style="margin-bottom: 5px;">E-Mail: info@stotz.com</li>
+                            <li style="margin-bottom: 5px;">Internet: www.stotz.com</li>
+                        </ul>
+                    </td>
+                    <td style="width: 47px; vertical-align: top;">
+                        <ul style="list-style-type: none;white-space: nowrap;">
+                            <li style="margin-bottom: 5px;">VR Bank Schwäbischer Wald eG</li>
+                            <li style="margin-bottom: 5px;">(BLZ 61391410) Konto Nr. 0210210117</li>
+                            <li style="margin-bottom: 5px;">IBAN: DE62 6139 1410 0210 2101 17</li>
+                            <li style="margin-bottom: 5px;">SWIFT/BIC: GENODES1WEL</li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+                 </div>
+
+         </t>
+      </t>
+
+
+ </template>
+</odoo>

@@ -1,3 +1,3 @@
-alert("LOaded!!")
-console.log("LOaded")
+alert("Loaded!!")
+console.log("Loaded")
 

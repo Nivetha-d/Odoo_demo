@@ -26,6 +26,7 @@ class SaleOrderLine(models.Model):
 
 
 
+
 class Stockmove(models.Model):
 
     _inherit = 'stock.move'

@@ -318,7 +318,7 @@
                     <span t-out="tax_totals['formatted_rounding_amount']">0</span>
                 </td>
             </tr>
-            
+
             <!--Total amount with all taxes-->
             <tr class="border-black o_total">
                 <td><strong>Total</strong></td>
@@ -351,7 +351,7 @@
                     <t t-else="">
                         <td>
                             <span t-out="amount_by_group['tax_group_name']">Tax 15%</span>
-                             on 
+                             on
                             <span class="text-nowrap" t-out="amount_by_group['formatted_tax_group_base_amount']">27.00</span>
                         </td>
                         <td class="text-end o_price_total">

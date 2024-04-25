@@ -6,7 +6,7 @@
         <field name="model">purchase.newchanges</field>
         <field name="arch" type="xml">
             <tree>
-                <field name="emp_name"/>
+                <field name="em_name"/>
             </tree>
         </field>
     </record>
@@ -30,7 +30,7 @@
                             context="{'send_rfq':True}" class="oe_highlight" data-hotkey="g"/>
                     <button name="button_reject" invisible="state != 'approve'" string="Reject" type="object"
                             context="{'send_rfq':True}" class="oe_highlight" data-hotkey="g"/>
-                    <button name="purchase_quotation" invisible="state != 'approve'" string="Create PO and Picking"
+                    <button name="purchase_quotation" invisible="state == 'po created'" string="Create PO and Picking"
                             type="object"
                             context="{'send_rfq':True}" class="oe_highlight" data-hotkey="g"/>
                     <field name="state" widget="statusbar"
@@ -41,9 +41,9 @@
                         <button type="object" name="action_my_smart_button"
                                 class="oe_stat_button"
                                 icon="fa-pencil-square-o"
-                                invisible="state in ('draft', 'confirm', 'department')" string="Purchase"/>
-
-
+                                invisible="state in ('draft', 'confirm', 'department')">
+                            <field name="purchase_count" widget="statinfo" string="Purchase"/>
+                        </button>
 
                         <!--                        <button type="object" name="action_view_invoice"-->
                         <!--                                class="oe_stat_button"-->
@@ -71,7 +71,8 @@
 
                     <group>
                         <group>
-                            <field name="emp_name"/>
+<!--                            <field name="emp_name"/>-->
+                            <field name="em_name"/>
                             <field name="department_name"/>
                         </group>
                         <group>
@@ -87,7 +88,7 @@
                                     <field name="requisition_action"/>
                                     <field name="product_id"/>
                                     <field name="name"/>
-                                    <field name="quantity"/>
+                                    <field name="product_uom_qty"/>
                                     <field name="price_unit"/>
                                     <field name="uom_id"/>
                                     <field name="vendor_name"/>

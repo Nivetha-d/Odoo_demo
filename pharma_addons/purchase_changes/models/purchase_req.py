@@ -13,7 +13,8 @@ class purchaserequesition(models.Model):
     is_verified = fields.Boolean("verify")
     is_req_sent = fields.Boolean("send")
 
-    emp_name = fields.Many2one('hr.employee', string='Employee Name')
+    # emp_name = fields.Many2one('hr.employee', string='Employee Name')
+    em_name=fields.Many2one('res.users',string="Employee Name",required=True)
     department_name = fields.Many2one('hr.department', string='Department Name')
     managers_id = fields.Many2one('hr.department', string='Department Manager')
     req_date = fields.Date('Request Date')
@@ -22,7 +23,7 @@ class purchaserequesition(models.Model):
     deliver_to = fields.Many2one('stock.picking.type', string='Deliver To')
     internal_picking = fields.Many2one('stock.picking.type', string='Internal Picking Location')
 
-    name = fields.Char('Order Reference', required=True, copy=False,default='New')
+    name = fields.Char('Order Reference', required=True, index='trigram', copy=False, default='New')
     priority = fields.Selection(
         [('0', 'Normal'), ('1', 'Urgent')], 'Priority', default='0', index=True)
     purchase_count = fields.Integer(compute="_compute_purchase_count")
@@ -33,6 +34,7 @@ class purchaserequesition(models.Model):
                                   domain=[('is_company', '=', True),
                                           ('invoice_ids.name', '!=',
                                            False)])
+    p_unit_price=fields.Many2one('pur.req.lines',string="Price")
 
     state = fields.Selection([
         ('draft', 'Draft'),
@@ -45,13 +47,6 @@ class purchaserequesition(models.Model):
 
     ], string='Status', readonly=True, index=True, copy=False, default='draft', tracking=True)
 
-    @api.model
-    def create(self, vals):
-        if vals.get('name', 'New') == 'New':
-            vals['name'] = self.env['ir.sequence'].next_by_code('purchase.newchanges')
-        return super(purchaserequesition, self).create(vals)
-
-
     @api.depends('prod_line_ids')
     def _compute_purchase_count(self):
         for record in self:
@@ -61,21 +56,15 @@ class purchaserequesition(models.Model):
 
     def action_my_smart_button(self):
         if self.purchase_count > 0:
-            purchase_order = self.env['purchase.order'].search(
-                [('product_id', '=', self.prod_line_ids.product_id.id), ('emp_name', '=', self.emp_name.id), ],
-                # Sort by creation date in descending order
-                limit=1  # Limit the result to one record
-            )
-            print(purchase_order)
+            purchase_order = self.env['purchase.order'].search([('product_id', '=', self.prod_line_ids.product_id.id)],
+                                                               limit=1)
             if purchase_order:
                 return {
                     'type': 'ir.actions.act_window',
                     'name': 'Purchase Order',
                     'res_model': 'purchase.order',
-                    'view_mode': 'form',
-                    'res_id': purchase_order.id,
-                    'domain': [('product_id', '=', self.prod_line_ids.product_id.id), ],
-
+                    'view_mode': 'tree,form',
+                    'domain': [('product_id', '=', self.prod_line_ids.product_id.id)],
                 }
         return {}
 
@@ -125,7 +114,64 @@ class purchaserequesition(models.Model):
             rec.is_req_sent = False
             self.state = 'cancel'
 
+    # def purchase_quotation(self):
+    #     print("raj")
+    #     self.ensure_one()
+    #     self.state = 'po created'
+    #
+    #     # Retrieve the partner_id from the related model or from the current model
+    #     partner_id = self.partner_id.id if hasattr(self, 'partner_id') else False
+    #
+    #     if not partner_id:
+    #         # Handle the case where partner_id is not set
+    #         # You might want to raise an exception, log a warning, or perform some other action
+    #         pass
+    #
+    #     # Retrieve purchase order lines based on pur.req.lines
+    #     order_lines = []
+    #     for line in self.prod_line_ids:
+    #         # Retrieve the price_unit from pur.req.lines
+    #         price_unit = line.requisition_action.price_unit if line.requisition_action else line.price_unit
+    #
+    #         order_line = (0, 0, {
+    #             'product_id': line.product_id.id,
+    #             'requisition_action': line.requisition_action.id,
+    #             'name': line.name,
+    #             'product_qty': line.product_uom_qty,
+    #             'price_unit': price_unit,
+    #             'date_planned': datetime.now(),
+    #             'product_uom': line.uom_id.id,
+    #         })
+    #         order_lines.append(order_line)
+    #
+    #     # Set up the action dictionary with the necessary context and res_id
+    #     action = {
+    #         'name': 'Purchase Order',
+    #         'type': 'ir.actions.act_window',
+    #         'res_model': 'purchase.order',
+    #         'view_mode': 'form',
+    #         'view_id': self.env.ref('purchase.purchase_order_form').id,
+    #         'view_type': 'form',
+    #         'res_0.00id': False,  # Set to False to open a new record
+    #         'context': {
+    #             'default_partner_id': partner_id,
+    #             'default_origin': self.name,
+    #             'default_opportunity_id': self.id,
+    #             'default_pur_req': self.id,
+    #             'default_order_line': order_lines,
+    #             'default_vendor_name': self.vendor_name,  # Assuming vendor_name is a field in your model
+    #             # Add other default values as needed
+    #         },
+    #     }
+    #
+    #     return action
+
+
+
+
+
     def purchase_quotation(self):
+
         self.ensure_one()
         self.state = 'po created'
         action = self.env["ir.actions.actions"]._for_xml_id("purchase.purchase_rfq")
@@ -134,16 +180,19 @@ class purchaserequesition(models.Model):
         line_vals = []
         for rec in self:
             for line in rec.prod_line_ids:
+                # price_unit = line.requisition_action.price_unit if line.requisition_action else line.price_unit
+                # price_unit =self.env.ref('pur.req.lines').search[('price_unit')]
                 lines = {
                     'product_id': line.product_id.id,
                     'requisition_action': line.requisition_action.id,
                     'name': line.name,
-                    'product_qty': line.quantity,
+                    'product_qty': line.product_uom_qty,
                     'price_unit': line.price_unit,
                     'date_planned': datetime.now(),
                     'product_uom': line.uom_id.id,
 
                 }
+                print(line.price_unit)
                 line_vals.append(Command.create(lines))
                 print(line_vals)
 
@@ -153,8 +202,7 @@ class purchaserequesition(models.Model):
                     'default_origin': self.name,
                     'default_opportunity_id': self.id,
                     'default_pur_req': self.id,
-                    'default_partner_id': self.vendor_name,
-                    'default_emp_name': self.emp_name.id
+                    'default_partner_id': self.vendor_name
                 }
 
             return action
@@ -164,7 +212,6 @@ class purchase_changes(models.Model):
     _inherit = 'purchase.order'
 
     pur_req = fields.Many2one('purchase.newchanges', string='Pur Req')
-    emp_name = fields.Integer(string='Employee Name')
 
     # def write(self, vals):
     #     # print(vals)

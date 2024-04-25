@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-extend="ListView.buttons" t-name="custom_button.buttons">
+        <t t-jquery="button.o_list_button_add" t-operation="after">
+            <button type="button" class="btn btn-primary ms-2">
+                Custom Button
+            </button>
+        </t>
+    </t>
+</templates>

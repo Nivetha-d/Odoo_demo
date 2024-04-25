@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+   <t t-extend="sale_button.ListView.buttons"  t-inherit="web.ListView.Buttons" t-inherit-mode="primary">
+      <xpath expr="//*[@class= 'btn btn-primary o-list-button-add']" position="after">
+           <button type="button" class="btn btn-primary open_wizard_action" t-on-click="OnTestClick">
+               Open Wizard
+           </button>
+      </xpath>
+       </t>
+
+</templates>
