@@ -149,6 +149,17 @@ class YourModule(models.Model):
 
     file_data = fields.Binary(string='Abrechnungs-Nr.')
 
+    file_data_filename_readonly = fields.Boolean(compute='_compute_file_data_filename_readonly',
+                                                 store=False)
+
+    @api.depends('file_status_payment', 'file_status_bills')
+    def _compute_file_data_filename_readonly(self):
+        for record in self:
+            if record.file_status_payment in ['processed'] and record.file_status_bills in ['processed']:
+                record.file_data_filename_readonly = True
+            else:
+                record.file_data_filename_readonly = False
+
 
     @api.constrains('file_data')
     def check_duplicate_file(self):
@@ -213,6 +224,7 @@ class YourModule(models.Model):
                         self.write({'date': file_date})
                     except ValueError:
                         self.write({'file_status_payment': 'failed'})
+
                         break
 
 
@@ -269,6 +281,7 @@ class YourModule(models.Model):
                 if payment:
                     success = True
                     self.write({'file_status_payment': 'processed'})
+
 
 
 

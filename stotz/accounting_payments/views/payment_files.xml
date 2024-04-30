@@ -49,13 +49,14 @@
         <field name="arch" type="xml">
             <tree editable="bottom" string="Adesion Payment Files">
 <!--                <field name="filename"/>-->
-                 <field name="file_data" filename="filename" widget="binary"/>
-                <field name="filename"/>
+                 <field name="file_data" filename="filename" widget="binary"  readonly="file_data_filename_readonly"/>
+                <field name="filename" readonly="file_data_filename_readonly"/>
                 <field name="date"/>
                 <field name="file_status_payment" decoration-success="file_status_payment == 'processed'"   decoration-danger="file_status_payment == 'failed'" widget="badge"/>
                 <field name="file_status_bills" decoration-success="file_status_payment == 'processed'" decoration-danger="file_status_payment == 'failed'" widget="badge"/>
                 <button name="process_payment" type="object" string="Process Payment" class="btn btn-primary" invisible="file_status_payment in ['processed','failed']" colspan="1" />
                 <button name="process_bills" type="object" string="Process Bills" class="btn btn-primary" invisible="file_status_bills in ['processed','failed']" colspan="1" />
+                <field name="file_data_filename_readonly" invisible="1" string=""/>
 
 
             </tree>
