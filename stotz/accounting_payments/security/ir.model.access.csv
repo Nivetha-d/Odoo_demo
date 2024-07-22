@@ -1,5 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_upload_payments,accounting_payments.upload.payments,model_upload_payments,base.group_user,1,1,1,1
-access_payment_file,accounting_payments.payment_file,model_payment_file,base.group_user,1,1,1,1
-
-

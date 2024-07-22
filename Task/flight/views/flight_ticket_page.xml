@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="flight_ticket_page_main" name="flight">
+
+        <div class="container mt-5" style="background-color: #0e2613; color: #fff; padding: 20px;display:flex;flex-direction:column;">
+            <div style="margin-left:500px;">
+
+                <h2 class="text-center">Choose Origin &amp; Destination Airports:</h2>
+
+                <div class="form-group"
+                     style="background-color:#000000;width:300px;padding:10px;border-radius:5px;margin-bottom:25px;">
+                    <label for="origin" style="color: #fff;margin-left:5px;">Origin</label>
+                    <br/>
+                    <select id="origin" class="form-control"
+                            style="margin-top:10px;background-color:#000000;width:300px;color:#FFFFFF;border:none;outline:none;">
+                        <t t-foreach="origin_options" t-as="origin">
+                            <option t-esc="origin"/>
+                        </t>
+                    </select>
+                </div>
+
+                <div class="form-group"
+                     style="background-color:#000000;width:300px;padding:10px;border-radius:5px;margin-bottom:25px;">
+                    <label for="destination" style="color: #fff;margin-left:5px;">Destination</label>
+                    <br/>
+                    <select id="destination" class="form-control"
+                            style="margin-top:10px;background-color:#000000;width:300px;color:#FFFFFF;border:none;outline:none;">
+                        <t t-foreach="destination_options" t-as="destination">
+                            <option t-esc="destination"/>
+                        </t>
+                    </select>
+                </div>
+
+                <div class="form-group"
+                     style="background-color:#15361C;width:300px;padding:10px;border-radius:5px;margin-bottom:25px;">
+                    <label for="cabin" style="color: #fff;margin-left:5px;">Cabin Selection</label>
+                    <br/>
+                    <select id="cabin" class="form-control"
+                            style="margin-top:10px;background-color:#15361C;width:300px;color:#FFFFFF;border:none;outline:none;">
+                        <t t-foreach="cabin_options" t-as="cabin">
+                            <option t-esc="cabin"/>
+                        </t>
+                    </select>
+                </div>
+
+
+
+
+
+                <button type="button" style="width:100px;height:40px;border-radius:5px;background-color:#7FFFD4;" id="search_button">Search</button>
+
+
+
+          </div>
+            <br/>
+            <br/>
+            <div>
+             <div id="result" style="margin-left:0px;"></div>
+
+
+            </div>
+
+        </div>
+
+        <script type="text/javascript">
+            document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('search_button').addEventListener('click', function() {
+        var origin = document.getElementById('origin').value;
+        var destination = document.getElementById('destination').value;
+        var cabin = document.getElementById('cabin').value;
+
+        var jsonData = {
+            'origin': origin,
+            'destination': destination,
+            'partnerPrograms': [
+                'Air Canada',
+                'United Airlines',
+                'KLM',
+                'Qantas',
+                'American Airlines',
+                'Etihad Airways',
+                'Alaska Airlines',
+                'Qatar Airways',
+                'LifeMiles',
+            ],
+            'stops': 2,
+            'departureTimeFrom': '2024-07-09T00:00:00Z',
+            'departureTimeTo': '2024-10-07T00:00:00Z',
+            'isOldData': false,
+            'limit': 302,
+            'offset': 0,
+            'cabinSelection': [
+                cabin,
+            ],
+            'date': '2024-07-09T12:00:17.796Z',
+        };
+
+             function formatDate(dateString) {
+                var date = new Date(dateString);
+                return date.toISOString().split('T')[0]; // Extracts YYYY-MM-DD
+            }
+
+            // Extract dates
+            var departureTimeFromDate = formatDate(jsonData.departureTimeFrom);
+            var departureTimeToDate = formatDate(jsonData.departureTimeTo);
+
+
+        fetch('https://cardgpt.in/apitest', {
+            method: 'POST',
+            headers: {
+                'accept': 'application/json, text/plain, */*',
+                'accept-language': 'en-US,en;q=0.9,hi;q=0.8',
+                'cache-control': 'no-cache',
+                'content-type': 'application/json',
+                'user-agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+            },
+            body: JSON.stringify(jsonData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            var resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+            resultDiv.style = 'margin-left:300px;';
+
+            console.log(data)
+            console.log(data.data.length)
+
+            if (data.data.length > 0){
+                data.data.forEach(flight => {
+                    var flightDiv = document.createElement('div');
+                    flightDiv.style.cssText = 'background-color: #055C23; padding: 20px; border-radius: 10px; margin-bottom: 20px; display: inline-block;width:300px;margin-left:30px;';
+                    flightDiv.style.textAlign = 'center';
+                    var logoImg = document.createElement('img');
+                    logoImg.src = 'logo.png';
+                    logoImg.alt = 'logo';
+                    logoImg.style.cssText = 'width: 50px; height: 50px;';
+
+                    var programTitle = document.createElement('h2');
+                    programTitle.textContent = flight.partner_program;
+
+
+                    var routeInfo = document.createElement('p');
+                    routeInfo.textContent = `${origin} -> ${destination}`;
+
+
+
+                    var timeInfo = document.createElement('p');
+                    timeInfo.textContent = `${departureTimeFromDate} - ${departureTimeToDate}`;
+
+                    var business = document.createElement('div');
+                    business.style = 'display:flex;flex-direction:row;height:50px;justify-content:space-evenly;';
+
+
+                    var businessMiles = document.createElement('h1');
+                    businessMiles.textContent = `${flight.min_business_miles || 'N/A'}`;
+                   businessMiles.style = 'font-size:40px;margin-top:5px;';
+                   business.appendChild(businessMiles)
+
+                  if(flight.min_business_miles){
+                   if(flight.min_business_tax){
+                   var businessTax = document.createElement('p');
+                     businessTax.textContent = " + $" +`${flight.min_business_tax  || 'N/A'}`;
+                    businessTax.style = 'margin-top:25px;';
+                     business.appendChild(businessTax)
+            }
+            }
+
+
+                     var economy = document.createElement('div');
+                    economy.style = 'display:flex;flex-direction:row;height:50px;justify-content:space-evenly;';
+
+
+                     var economyMiles = document.createElement('h1');
+                    economyMiles.textContent = `${flight.min_economy_miles || 'N/A'}` ;
+                    economyMiles.style = 'font-size:40px;margin-top:5px;';
+                    economy.appendChild(economyMiles)
+
+                   if (flight.min_economy_miles){
+                   if (flight.min_economy_tax){
+                  var economyTax = document.createElement('p');
+                     economyTax.textContent = " + $" +`${flight.min_economy_tax}`;
+                    economyTax.style = 'margin-top:25px;';
+                     economy.appendChild(economyTax)
+               }
+            }
+
+
+
+                    var businessMilesValue = document.createElement('p');
+                    businessMilesValue.textContent = 'Min Business Miles';
+
+
+                  var economyMilesValue = document.createElement('p');
+                    economyMilesValue.textContent = 'Min Economy Miles';
+
+
+                   var first = document.createElement('div');
+                    first.style = 'display:flex;flex-direction:row;height:50px;justify-content:space-evenly;';
+
+
+                     var firstMiles = document.createElement('h1');
+                    firstMiles.textContent = `${flight.min_first_miles || 'N/A'}` ;
+                    firstMiles.style = 'font-size:40px;margin-top:5px;';
+                    first.appendChild(firstMiles)
+
+                   if (flight.min_first_miles) {
+                        if (flight.min_first_tax){
+                        var firstTax = document.createElement('p');
+                        firstTax.textContent = " + $" + `${flight.min_first_tax}`;
+                        firstTax.style = 'margin-top:25px;';
+
+                        first.appendChild(firstTax);
+                       }
+                    }
+
+
+                   var firstMilesValue = document.createElement('p');
+                    firstMilesValue.textContent = 'Min First Miles';
+
+
+
+
+                    var emptyLine = document.createElement('div');
+                    emptyLine.style = 'height:10px;';
+
+                    flightDiv.appendChild(logoImg);
+                    flightDiv.appendChild(programTitle);
+                    flightDiv.appendChild(routeInfo);
+                    flightDiv.appendChild(timeInfo);
+
+                    flightDiv.appendChild(emptyLine);
+
+                    flightDiv.appendChild(business);
+                    flightDiv.appendChild(businessMilesValue);
+
+
+                      flightDiv.appendChild(economy);
+                      flightDiv.appendChild(economyMilesValue);
+
+
+
+                    flightDiv.appendChild(emptyLine);
+
+                    flightDiv.appendChild(first);
+                    flightDiv.appendChild(firstMilesValue);
+
+
+                    resultDiv.appendChild(flightDiv);
+                });
+            }
+            else{
+            var noDataMessage = document.createElement('p');
+        noDataMessage.textContent = 'Try another search route.';
+            noDataMessage.style =  'background-color: #055C23;margin-left:200px;width:300px;height:50px;text-align:center;padding-top:20px;';
+        resultDiv.appendChild(noDataMessage);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+    });
+
+        </script>
+
+
+
+    </template>
+
+
+</odoo>
+
+
